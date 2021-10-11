@@ -1,8 +1,17 @@
 <template>
-  <!-- 输入框和按钮 -->
+  <!-- 输入框和按钮
+       双向数据绑定
+       表单回车事件 @keyup.enter
+       按钮点击事件 @click
+   -->
   <div class="input-add">
-    <input type="text" name="todo" />
-    <button>
+    <input
+      type="text"
+      name="todo"
+      v-model="todoContent"
+      @keyup.enter="emitAddTodo"
+    />
+    <button @click="emitAddTodo">
       <!-- 按钮图标 -->
       <i class="plus"></i>
     </button>
@@ -10,8 +19,31 @@
 </template>
 
 <script>
+// 导入setup函数
+import { ref } from 'vue'
 export default {
   name: 'TodoAdd',
+  // setup函数
+  setup(props, context) {
+    const todoContent = ref('')
+    // 事件处理函数
+    const emitAddTodo = () => {
+      const todo = {
+        id: props.id,
+        content: todoContent.value,
+        complete: false,
+      }
+      context.emit('add-todo', todo)
+      // 清空输入框内容
+      todoContent.value = ''
+    }
+
+    // return返回对象
+    return {
+      todoContent,
+      emitAddTodo,
+    }
+  },
 }
 </script>
 

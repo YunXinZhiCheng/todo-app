@@ -2,7 +2,12 @@
   <!-- todo 列表 -->
   <div class="todo-list">
     <!-- todo 项目 -->
-    <TodoListItem />
+    <TodoListItem
+      v-for="todo in todos"
+      :key="todo.id"
+      :todo-item="todo"
+      @change-state="todo.completed = $event.target.checked"
+    />
   </div>
 </template>
 
@@ -15,6 +20,8 @@ export default {
   components: {
     TodoListItem,
   },
+  // props属性接收数据
+  props: ['todos'],
 }
 </script>
 

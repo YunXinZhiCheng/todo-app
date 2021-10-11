@@ -6,18 +6,21 @@
       <h1>欢迎使用 Todo 待办事项</h1>
 
       <!-- 输入框和按钮 -->
-      <TodoAdd />
+      <TodoAdd :tid="todos.length" @add-todo="addTodo" />
 
       <!-- 过滤选项 -->
-      <TodoFilter />
+      <TodoFilter :selected="filter" @change-filter="filter = $event" />
 
       <!-- todo 列表 -->
-      <TodoList />
+      <TodoList :todos="filteredTodos" />
     </div>
   </main>
 </template>
 
 <script>
+// 导入ref函数
+import { computed, ref } from 'vue'
+
 // 导入子组件
 import TodoAdd from '@/components/TodoAdd'
 import TodoFilter from '@/components/TodoFilter'
@@ -29,6 +32,33 @@ export default {
     TodoAdd,
     TodoFilter,
     TodoList,
+  },
+  // setup函数
+  setup() {
+    // 展示Todo
+    const todos = ref([])
+    // 添加Todo
+    const addTodo = (todo) => todos.value.push(todo)
+    // 过滤Todo
+    const filter = ref('all')
+    // 过滤后Todo列表,计算属性
+    const filteredTodos = computed(() => {
+      switch (filter.value) {
+        case 'done':
+          return todos.value.filter((todo) => todo.completed)
+        case 'todo':
+          return todos.value.filter((todo) => !todo.completed)
+        default:
+          return todos.value
+      }
+    })
+    // return返回对象
+    return {
+      todos,
+      addTodo,
+      filter,
+      filteredTodos,
+    }
   },
 }
 </script>

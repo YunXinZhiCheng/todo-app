@@ -1,25 +1,15 @@
 <template>
   <!-- todo 项目，外层容器用于显示背景、圆角边框 -->
-  <div class="todo-item">
+  <div class="todo-item" :class="{ done: todoItem.completed }">
     <!-- 用 label 包裹后，点击里边任何一个元素都能触发 checkbox 的事件 -->
     <label>
-      <input type="checkbox" />
-      Todo 1
+      <input
+        type="checkbox"
+        :checked="todoItem.completed"
+        @click="$emit('change-state', $event)"
+      />
+      {{ todoItem.content }}
       <!-- 自定义的复选按钮 -->
-      <span class="check-button"></span>
-    </label>
-  </div>
-  <div class="todo-item">
-    <label>
-      <input type="checkbox" />
-      Todo 2
-      <span class="check-button"></span>
-    </label>
-  </div>
-  <div class="todo-item">
-    <label>
-      <input type="checkbox" />
-      Todo 3
       <span class="check-button"></span>
     </label>
   </div>
@@ -28,6 +18,8 @@
 <script>
 export default {
   name: 'TodoListItem',
+  // props属性接收数据
+  props: ['todoItem'],
 }
 </script>
 
@@ -45,7 +37,11 @@ export default {
   display: flex;
   align-items: center;
 }
-
+/* 项目完成后删除线 */
+.todo-item.done label {
+  text-decoration: line-through;
+  font-style: italic;
+}
 .todo-item label span.check-button {
   position: absolute;
   top: 0;
